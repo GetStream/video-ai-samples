@@ -1,21 +1,26 @@
 
-# Real-time Video AI by Stream
+# Real-time Video AI by Stream 🛥
 ![Real-time AI powered by Stream](./assets/wip_cover.png)
 
-🤖 This repo contains different samples from AI, LLMs, and computer vision running in real time on Stream's low-latency [Video API.](https://getstream.io/video/) 
+
+## 😎 Repo Overview
+This repo contains different samples across AI, LLMs, and computer vision running in real time on Stream's low-latency [Video API](https://getstream.io/video/). To run these examples, developers can [register for a free account](https://getstream.io/try-for-free/) to obtain an API key and bring their favourite AI service. 
+
+
+<br/>
 
 ## Stream Video
 Stream Video is a low-latency WebRTC API running on the [edge](https://getstream.io/blog/announcing-stream-video/), built and maintained by Stream. It serves traditional conferencing use cases, low-latency [livestreaming](https://getstream.io/video/livestreaming/) (with HLS and RTMP), and conversational voice/video agents. Developers can build with either Node.js or Python on the backend, while frontend developers can easily integrate with a few lines of code across [Android](https://getstream.io/video/sdk/android/), [iOS](https://getstream.io/video/sdk/ios/), [Flutter](https://getstream.io/video/sdk/flutter/), [React Native](https://getstream.io/video/sdk/react-native/), [React](https://getstream.io/video/sdk/react/), [JavaScript](https://getstream.io/video/sdk/javascript/) and [Unity](https://getstream.io/video/sdk/unity/) using our pre-built UI libraries.
 
-## 📱 Examples
+## 🔎 Examples
+
+> 💡 Have a sport you like? We are accepting contributions from the community to creative Video AI examples. Open a PR or ping us on X with your examples, and we’d love to highlight it in our repo ⭐
+
 | **🔮** Official Samples |  |
 | --- | --- |
-|<br><h3>Mini-golf coaching assistant</h3>[live_sports_coach](https://github.com/GetStream/video-ai-samples/tree/live-sports-coach/live_sports_coach) is a real-time video AI example using Google’s Gemini Live to analyse players posture and putting skills. The example can be run in both a real-time mode using a device camera to view and analyse posture or it can be ran with a pre-recorded example file which is great for debugging and tweaking the model  configuration.  | [![Watch the video](https://img.youtube.com/vi/SudY-DQd0kg/maxresdefault.jpg)](https://youtu.be/SudY-DQd0kg) |
+|<br><h3>Mini-golf coaching assistant</h3>[live_sports_coach](https://github.com/GetStream/video-ai-samples/tree/live-sports-coach/live_sports_coach) is a real-time video AI example using Google’s Gemini Live to analyse players posture and putting skills. The example can be run in both a real-time mode using a device camera to view and analyse posture, or it can be run with a pre-recorded example file, which is great for debugging and tweaking the model configuration.  | [![Watch the video](https://img.youtube.com/vi/SudY-DQd0kg/maxresdefault.jpg)](https://youtu.be/SudY-DQd0kg) |
 |  |  |
 
-<aside>
-💡 Have a sport you like? We are accepting contributions from the community to creative Video AI examples. Open a PR or ping us on X with your examples and we’d love to highlight it in our repo ⭐
-</aside>
 
 ## 
 
@@ -28,9 +33,9 @@ Stream is free for most side and hobby projects. To qualify, your project/compan
 
 ## 
 
-## Find this Android library useful? 💙
+## Find this repo useful? 💙
 
-Support it by joining [**stargazers**](https://github.com/getStream/stream-webrtc-android/stargazers) for this repository. ⭐️
+Support it by joining [**stargazers**](https://github.com/getStream/video-ai-samples/stargazers) for this repository. ⭐️
 
 # License
 

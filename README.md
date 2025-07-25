@@ -1,5 +1,7 @@
 
 # Real-time Video AI by Stream
+![Real-time AI powered by Stream](./assets/wip_cover.png)
+
 
 [Stream Video](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/HayesGordon/e7f3c4587859c17f3e593fd3ff5b13f4/raw/11d9d9385c9f34374ede25f6471dc743b977a914/badge.json)
 
@@ -11,15 +13,11 @@ Stream Video is a low-latency WebRTC API running on the [edge](https://getstream
 ## 📱 Examples
 | **🔮** Official Samples |  |
 | --- | --- |
-| Mini-golf coaching assistant 
-[live_sports_coach](https://github.com/GetStream/video-ai-samples/tree/live-sports-coach/live_sports_coach) is a real-time video AI example using Google’s Gemini Live to analyse players posture and putting skills. The example can be run in both a real-time mode using a device camera to view and analyse posture or it can be ran with a pre-recorded example file which is great for debugging and tweaking the model  configuration.  |  |
+|<br><h3>Mini-golf coaching assistant</h3>[live_sports_coach](https://github.com/GetStream/video-ai-samples/tree/live-sports-coach/live_sports_coach) is a real-time video AI example using Google’s Gemini Live to analyse players posture and putting skills. The example can be run in both a real-time mode using a device camera to view and analyse posture or it can be ran with a pre-recorded example file which is great for debugging and tweaking the model  configuration.  | [![Watch the video](https://img.youtube.com/vi/SudY-DQd0kg/maxresdefault.jpg)](https://youtu.be/SudY-DQd0kg) |
 |  |  |
 
 <aside>
-💡
-
-Have a sport you like? We are accepting contributions from the community to creative Video AI examples. Open a PR or ping us on X with your examples and we’d love to highlight it in our repo ⭐
-
+💡 Have a sport you like? We are accepting contributions from the community to creative Video AI examples. Open a PR or ping us on X with your examples and we’d love to highlight it in our repo ⭐
 </aside>
 
 ## 

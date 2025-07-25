@@ -2,9 +2,6 @@
 # Real-time Video AI by Stream
 ![Real-time AI powered by Stream](./assets/wip_cover.png)
 
-
-[Stream Video](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/HayesGordon/e7f3c4587859c17f3e593fd3ff5b13f4/raw/11d9d9385c9f34374ede25f6471dc743b977a914/badge.json)
-
 🤖 This repo contains different samples from AI, LLMs, and computer vision running in real time on Stream's low-latency [Video API.](https://getstream.io/video/) 
 
 ## Stream Video
@@ -22,7 +19,9 @@ Stream Video is a low-latency WebRTC API running on the [edge](https://getstream
 
 ## 
 
-![](https://user-images.githubusercontent.com/24237865/138428440-b92e5fb7-89f8-41aa-96b1-71a5486c5849.png)
+<a href="https://getstream.io/?utm_source=Github&utm_medium=Github_Repo_Content_Ad&utm_content=Developer&utm_campaign=Video_AI_Demos&utm_term=DevRelOss">
+<img src="https://user-images.githubusercontent.com/24237865/138428440-b92e5fb7-89f8-41aa-96b1-71a5486c5849.png" align="right" width="12%"/>
+</a>
 
 ## 🛥 Stream for builders 
 Stream is free for most side and hobby projects. To qualify, your project/company needs to have < 5 team members and < $10k in monthly revenue. Makers get $100 in monthly credit for video for free. For more details, check out the [Maker Account](https://getstream.io/maker-account/?utm_source=Github&utm_medium=Github_Repo_Content_Ad&utm_content=Developer&utm_campaign=Video_AI_Demos&utm_term=DevRelOss).

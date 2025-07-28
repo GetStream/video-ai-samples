@@ -1,6 +1,6 @@
 
 # Real-time Video AI by Stream 🛥
-![Real-time AI powered by Stream](./assets/wip_cover.png)
+![Real-time AI powered by Stream](./assets/cover.png)
 
 
 ## 😎 Repo Overview

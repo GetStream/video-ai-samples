@@ -60,6 +60,10 @@ class PoseVideoTrack(aiortc.VideoStreamTrack):
         self.pose_model.to('cpu')  # Ensure CPU inference for stability
         self.executor = ThreadPoolExecutor(max_workers=2, thread_name_prefix="pose_processor")
         self._shutdown = False
+        # Set video quality parameters
+        self.width = 1920
+        self.height = 1080
+        print(f"PoseVideoTrack initialized with dimensions: {self.width}x{self.height}")
     
     def cleanup(self):
         """Clean up resources"""
@@ -72,12 +76,20 @@ class PoseVideoTrack(aiortc.VideoStreamTrack):
             frame = await asyncio.wait_for(self.frame_q.get(), timeout=0.02)
             if frame:
                 self.last_frame = frame
+                print(f"Got frame from queue: {frame.size}")
         except asyncio.TimeoutError:
+            print("No frame in queue, using last frame")
             pass
         pts, time_base = await self.next_timestamp()
+        
+        # Ensure the image is the correct size before creating video frame
+        if self.last_frame.size != (self.width, self.height):
+            self.last_frame = self.last_frame.resize((self.width, self.height), Image.Resampling.LANCZOS)
+        
         av_frame = av.VideoFrame.from_image(self.last_frame)
         av_frame.pts = pts
         av_frame.time_base = time_base
+        print(f"Returning video frame: {av_frame.width}x{av_frame.height}")
         return av_frame
 
     def _process_pose_sync(self, frame_array: np.ndarray) -> np.ndarray:
@@ -86,11 +98,15 @@ class PoseVideoTrack(aiortc.VideoStreamTrack):
             if self._shutdown:
                 return frame_array
             
+            # Store original dimensions for quality preservation
+            original_height, original_width = frame_array.shape[:2]
+            print(f"Processing pose detection on frame: {original_width}x{original_height}")
+            
             # Run pose detection on every frame
             pose_results = self.pose_model(
                 frame_array, 
                 verbose=False, 
-                imgsz=416,  # Smaller image size for speed
+                imgsz=512,  # Balanced image size for quality and speed
                 conf=0.5,   # Higher confidence threshold
                 device='cpu'
             )
@@ -123,7 +139,7 @@ class PoseVideoTrack(aiortc.VideoStreamTrack):
                         (5, 6), (5, 7), (7, 9), (6, 8), (8, 10),  # Arm connections
                         (5, 11), (6, 12), (11, 12),  # Torso connections
                         (11, 13), (13, 15), (12, 14), (14, 16),  # Leg connections
-                        # Enhanced hand and wrist connections for tennis
+                        # Enhanced hand and wrist connections for kickboxing
                         (9, 15), (15, 16), (16, 17), (17, 18), (18, 19),  # Right hand thumb
                         (9, 20), (20, 21), (21, 22), (22, 23), (23, 24),  # Right hand index
                         (9, 25), (25, 26), (26, 27), (27, 28), (28, 29),  # Right hand middle
@@ -151,7 +167,7 @@ class PoseVideoTrack(aiortc.VideoStreamTrack):
                                     color = (255, 0, 0)  # Blue for main skeleton
                                 cv2.line(annotated_frame, (int(x1), int(y1)), (int(x2), int(y2)), color, 2)
                     
-                    # Highlight wrist positions specifically for tennis analysis
+                    # Highlight wrist positions specifically for kickboxing analysis
                     wrist_keypoints = [9, 10]  # Right and left wrists
                     for wrist_idx in wrist_keypoints:
                         if wrist_idx < len(kpts):
@@ -178,10 +194,15 @@ class PoseVideoTrack(aiortc.VideoStreamTrack):
         loop = asyncio.get_event_loop()
         
         try:
-            processed_array = await loop.run_in_executor(
-                self.executor, self._process_pose_sync, frame_array
+            # Add timeout to prevent blocking
+            processed_array = await asyncio.wait_for(
+                loop.run_in_executor(self.executor, self._process_pose_sync, frame_array),
+                timeout=2.0  # 2 second timeout
             )
             return Image.fromarray(processed_array)
+        except asyncio.TimeoutError:
+            print("Pose processing timed out, returning original frame")
+            return frame
         except Exception as e:
             print(f"Error in async pose processing: {e}")
             return frame
@@ -274,23 +295,31 @@ async def on_track_added(track_id, track_type, user, target_user_id, ai_connecti
         if not g_session:
             client = genai.Client(http_options={"api_version": "v1beta"}, api_key=os.getenv("GOOGLE_API_KEY"))
             PROMPT = """
-            You are a professional tennis coach and expert.
-            You will be given video frames from a tennis practice session showing a player's serve technique with pose detection overlay at 1 frame per second.
-            The pose detection shows key body points and skeletal structure to help analyze form.
+            You are a profession kickboxer turned coach. You have a snarky coaching method and a lot of personality.  
+            You are given a video of a player learning kickboxing.
+            You will be given video frames from a kickboxing training session showing a fighter performing various techniques, captured at 1 frame per second, with pose detection overlays highlighting key body points and skeletal structure to assist with form analysis.
+
+            Analyze the fighter’s kickboxing technique, focusing on:
+
+            Stance and foot positioning
+
+            Guard and hand positioning
+
+            Hip rotation and core engagement
+
+            Kicking form and chamber mechanics
+
+            Punch technique and shoulder alignment
+
+            Transitions between offensive and defensive posture
+
+            Overall fluidity, balance, and form
             
-            Analyze the player's tennis serve technique focusing on:
-            - Stance and foot positioning
-            - Racket grip and preparation
-            - Ball toss technique and timing
-            - Body rotation and weight transfer
-            - Follow-through and finish position
-            - Overall serve mechanics and form
-            
-            Provide specific, actionable coaching feedback to help improve their tennis serve.
+            Provide specific, actionable coaching feedback to help improve their kickboxing.
             Be encouraging but direct about areas for improvement.
             
             DO NOT repeat the same feedback unless the player makes changes.
-            DO NOT provide general tennis information - focus only on what you observe.
+            DO NOT provide general kickboxing information - focus only on what you observe.
             DO NOT greet the user before they speak.
             """
 
@@ -329,7 +358,7 @@ async def on_track_added(track_id, track_type, user, target_user_id, ai_connecti
                 pose_frame_queue = asyncio.Queue(maxsize=MAX_QUEUE_SIZE)
                 
                 # Start tasks
-                asyncio.create_task(gather_responses(session, Path("debug/tennis_analysis.txt"), audio_in_queue))
+                asyncio.create_task(gather_responses(session, Path("debug/kickboxing_analysis.txt"), audio_in_queue))
                 asyncio.create_task(play_audio(audio_in_queue, audio_track))
                 asyncio.create_task(send_pose_frames_to_gemini(session, pose_frame_queue))
 
@@ -340,6 +369,7 @@ async def on_track_added(track_id, track_type, user, target_user_id, ai_connecti
                         video_frame: aiortc.mediastreams.VideoFrame = await track.recv()
                         if video_frame:
                             img = video_frame.to_image()
+                            print(f"Processing frame {frame_count}: {img.size}")
                             
                             # Process every frame with pose detection
                             pose_annotated_frame = await pose_track.process_pose_async(img)
@@ -366,7 +396,7 @@ async def on_track_added(track_id, track_type, user, target_user_id, ai_connecti
                                     pass
                             
                             if args.debug:
-                                pose_annotated_frame.save(f"debug/tennis_frame_{frame_count}.png")
+                                pose_annotated_frame.save(f"debug/kickboxing_frame_{frame_count}.png")
                             
                             frame_count += 1
                             
@@ -389,7 +419,7 @@ async def publish_media(call: Call, user_id: str, player: MediaPlayer):
         print(f"Error: {e} - stacktrace: {traceback.format_exc()}")
 
 async def main():
-    print(f"Tennis Coach AI Example")
+    print(f"kickboxing Coach AI Example")
     print("=" * 50)
 
     # Load environment variables
@@ -410,7 +440,7 @@ async def main():
     client = Stream.from_env()
 
     # Create a unique call
-    call_id = f"tennis-ai-example-{str(uuid4())}"
+    call_id = f"kickboxing-ai-example-{str(uuid4())}"
     call = client.video.call("default", call_id)
     print(f"Call ID: {call_id}")
 
@@ -418,16 +448,16 @@ async def main():
     player_user_id = f"player-{str(uuid4())[:8]}"
     ai_user_id = f"ai-{str(uuid4())[:8]}"
 
-    create_user(client, player_user_id, "Tennis Player")
+    create_user(client, player_user_id, "Player")
     if input_media_player:
         create_user(client, viewer_user_id, "Viewer")
         token = client.create_token(viewer_user_id, expiration=3600)
     else:
         token = client.create_token(player_user_id, expiration=3600)
-    create_user(client, ai_user_id, "Tennis Coach AI")
+    create_user(client, ai_user_id, "Coach AI")
 
     # Create the call
-    call.get_or_create(data={"created_by_id": "tennis-ai-example"})
+    call.get_or_create(data={"created_by_id": "kickboxing-ai-example"})
 
     try:
         # Join all bots first and add their tracks
@@ -491,7 +521,7 @@ async def main():
 
 if __name__ == "__main__":
     # Parse command line arguments
-    args_parser = argparse.ArgumentParser(description="Tennis Coach AI Example")
+    args_parser = argparse.ArgumentParser(description="Coach AI Example")
     args_parser.add_argument(
         "-i", "--input-file",
         required=False,

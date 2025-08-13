@@ -18,8 +18,8 @@ Stream Video is a low-latency WebRTC API running on the [edge](https://getstream
 
 | **🔮** Official Samples |  |
 | --- | --- |
-|<br><h3>Mini-golf coaching assistant</h3>[live_sports_coach](https://github.com/GetStream/video-ai-samples/tree/live-sports-coach/live_sports_coach) is a real-time video AI example using Google’s Gemini Live to analyse players posture and putting skills. The example can be run in both a real-time mode using a device camera to view and analyse posture, or it can be run with a pre-recorded example file, which is great for debugging and tweaking the model configuration.  | [![Watch the video](https://img.youtube.com/vi/SudY-DQd0kg/maxresdefault.jpg)](https://youtu.be/SudY-DQd0kg) |
-|  |  |
+|<br><h3>Mini-golf coaching assistant</h3>[live_sports_coach](https://github.com/GetStream/video-ai-samples/tree/live-sports-coach/live_sports_coach) is a real-time video AI example using Google’s Gemini Live to analyse players posture and putting skills. The example can be run in both a real-time mode using a device camera to view and analyse posture, or it can be run with a pre-recorded example file, which is great for debugging and tweaking the model configuration.  | [![Watch the video](https://img.youtube.com/vi/_MIrA9ogntY/maxresdefault.jpg)](https://youtu.be/_MIrA9ogntY) |
+| <br><h3>Kickboxing tutor</h3>[Kickboxing tutor](https://github.com/GetStream/video-ai-samples/tree/live-sports-coach/live_sports_coach/kickboxing_example.py) is a real-time AI tutor which uses [Ultralytics YOLO](https://docs.ultralytics.com/tasks/pose/) model to detect and outline body movement before sending those frames to Gemini Live, where the model can help you improve your Kickboxing technique. | [![Watch the video](https://img.youtube.com/vi/ZYyRXocKoCk/maxresdefault.jpg)](https://youtu.be/ZYyRXocKoCk)  | |
 
 
 ## 

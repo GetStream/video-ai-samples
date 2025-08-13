@@ -1,0 +1,11 @@
+[project]
+name = "security-cam"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "getstream[webrtc]==2.3.0a3",
+    "ultralytics>=8.3.170",
+    "supervision"
+]
